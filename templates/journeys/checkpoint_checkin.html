@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-3">Check in at {{ checkpoint.name }}</h2>
+<p>
+  Journey: {{ checkpoint.journey.origin }} → {{ checkpoint.journey.destination }}<br>
+  Expected time: {{ checkpoint.expected_time }}
+</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-success">Confirm check-in</button>
+  <a href="{% url 'journeys:journey_detail' checkpoint.journey.pk %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
+

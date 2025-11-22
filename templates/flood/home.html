@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block header_files %}
+<script src="{% static 'flood/js/map-view.js' %}"></script>
+<style>
+  #map {
+    height: 600px;
+  }
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .legend-widget {
+    max-width: 400px;
+    font-size: 0.9rem;
+  }
+
+  .legend-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .legend-color-box {
+    width: 24px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .legend-item {
+    padding: 6px 12px;
+  }
+</style>
+{% endblock header_files %}
+
+{% block scripts %}
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initMap&v=weekly&libraries=marker"
+  defer>
+</script>
+{% endblock scripts %}
+
+{% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-md-12 col-xs-12">
+    <div id="map"></div>
+
+    <div class="legend-widget mt-3">
+      <h6 class="legend-title">Flood marker legend</h6>
+      <ul class="legend-list list-group">
+        <li class="legend-item list-group-item d-flex align-items-center">
+          <span class="legend-color-box" style="background-color: #ffffe6;"></span>
+          Device reading at/near normal dry bed level
+        </li>
+        <li class="legend-item list-group-item d-flex align-items-center">
+          <span class="legend-color-box" style="background-color: #ffff99;"></span>
+          Water detected above dry bed level
+        </li>
+        <li class="legend-item list-group-item d-flex align-items-center">
+          <span class="legend-color-box" style="background-color: #E28743;"></span>
+          Water over road (&lt;300mm)
+        </li>
+        <li class="legend-item list-group-item d-flex align-items-center">
+          <span class="legend-color-box" style="background-color: #FF0000;"></span>
+          Water over road (&gt;300mm)
+        </li>
+        <li class="legend-item list-group-item d-flex align-items-center">
+          <span class="legend-color-box" style="background-color: #a6a6a6;"></span>
+          Last uplink &gt;12 hours ago (old report)
+        </li>
+      </ul>
+    </div>
+
+    <div class="mt-3">
+      <h6 class="legend-title">Important notes</h6>
+      <ul>
+        <li>
+          Check the Murweh Shire Council
+          <a href="https://disaster.murweh.qld.gov.au/">Dashboard</a> and
+          <a href="https://qldtraffic.qld.gov.au/">QLD Traffic</a> for road closure information.
+        </li>
+        <li>
+          This is an automated system and as such the accuracy of data cannot be guaranteed.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

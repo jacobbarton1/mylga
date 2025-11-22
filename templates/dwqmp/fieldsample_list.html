@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Field samples</h2>
+  <a href="{% url 'dwqmp:fieldsample_create' %}" class="btn btn-success btn-sm">New</a>
+</div>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr><th>Test point</th><th>Collected at</th><th>Collected by</th></tr>
+    </thead>
+    <tbody>
+      {% for obj in object_list %}
+      <tr>
+        <td>{{ obj.test_point }}</td>
+        <td>{{ obj.collected_at }}</td>
+        <td>{{ obj.collected_by }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" class="text-muted">No records yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+

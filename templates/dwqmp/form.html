@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-3">Edit</h2>
+<form method="post" enctype="multipart/form-data" class="card card-body">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="mb-3">
+    <label class="form-label">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+  </div>
+  {% endfor %}
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-secondary" href="javascript:history.back()">Cancel</a>
+</form>
+{% endblock %}
+

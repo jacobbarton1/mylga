@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Fleet vehicles</h2>
+  <a href="{% url 'fleet:vehicle_create' %}" class="btn btn-primary btn-sm">Add vehicle</a>
+</div>
+
+{% if vehicles %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Unit</th>
+        <th>Registration</th>
+        <th>Category</th>
+        <th>Make / Model</th>
+        <th>Department</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in vehicles %}
+      <tr>
+        <td>{{ v.unit_number|floatformat:"0" }}</td>
+        <td>{{ v.registration }}</td>
+        <td>{{ v.get_category_display }}</td>
+        <td>{{ v.make }} {{ v.model }}</td>
+        <td>{{ v.department }}</td>
+        <td class="text-end">
+          <a class="btn btn-outline-secondary btn-sm" href="{% url 'fleet:vehicle_detail' v.pk %}">
+            View
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">No vehicles have been added yet.</p>
+{% endif %}
+{% endblock %}
+

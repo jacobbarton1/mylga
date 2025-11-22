@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="px-4 py-5 my-4 text-center">
+  <h1 class="display-5 fw-bold">Murweh LGA internal tools</h1>
+  <div class="col-lg-8 mx-auto">
+    <p class="lead mb-4">
+      A single place for fleet defect reporting, drinking water quality planning,
+      journey management, and floodway sensor monitoring.
+    </p>
+    {% if not request.user.is_authenticated %}
+    <p>
+      <a class="btn btn-primary btn-lg" href="{% url 'accounts:request_link' %}">
+        Sign in with your @murweh.qld.gov.au email
+      </a>
+    </p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Fleet defects & maintenance</h5>
+        <p class="card-text">
+          Log vehicle defects in seconds and track maintenance history for each unit.
+        </p>
+        <a href="{% url 'fleet:vehicle_list' %}" class="btn btn-outline-primary">Open fleet app</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Drinking water quality</h5>
+        <p class="card-text">
+          Manage schemes, sampling points, lab results, non-conformances and corrective actions.
+        </p>
+        <a href="{% url 'dwqmp:home' %}" class="btn btn-outline-primary">Open water quality app</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Journey management plans</h5>
+        <p class="card-text">
+          Create simple journey plans with buddies and checkpoints for remote work.
+        </p>
+        <a href="{% url 'journeys:journey_list' %}" class="btn btn-outline-primary">Open journeys app</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Floodway sensors</h5>
+        <p class="card-text">
+          View live levels from floodway sensors across the shire, with map and history plots.
+        </p>
+        <a href="{% url 'flood:home' %}" class="btn btn-outline-primary">Open flood monitoring</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

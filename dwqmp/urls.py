@@ -1,0 +1,91 @@
+from django.urls import path
+
+from .views import (
+    CorrectiveActionCreateView,
+    CorrectiveActionListView,
+    FieldSampleCreateView,
+    FieldSampleListView,
+    FieldSampleUpdateView,
+    HomeView,
+    IncidentCreateView,
+    IncidentListView,
+    NonConformanceCreateView,
+    NonConformanceListView,
+    SampleCollectionCreateView,
+    SampleCollectionListView,
+    SampleCollectionUpdateView,
+    SampleResultCreateView,
+    SampleResultListView,
+    SchemeCreateView,
+    SchemeListView,
+    SchemeUpdateView,
+    ServiceProviderCreateView,
+    ServiceProviderListView,
+    ServiceProviderUpdateView,
+    TestPointCreateView,
+    TestPointListView,
+    TestPointUpdateView,
+)
+
+app_name = "dwqmp"
+
+urlpatterns = [
+    path("", HomeView.as_view(), name="home"),
+    path("providers/", ServiceProviderListView.as_view(), name="serviceprovider_list"),
+    path(
+        "providers/new/",
+        ServiceProviderCreateView.as_view(),
+        name="serviceprovider_create",
+    ),
+    path(
+        "providers/<int:pk>/edit/",
+        ServiceProviderUpdateView.as_view(),
+        name="serviceprovider_update",
+    ),
+    path("schemes/", SchemeListView.as_view(), name="scheme_list"),
+    path("schemes/new/", SchemeCreateView.as_view(), name="scheme_create"),
+    path("schemes/<int:pk>/edit/", SchemeUpdateView.as_view(), name="scheme_update"),
+    path("testpoints/", TestPointListView.as_view(), name="testpoint_list"),
+    path("testpoints/new/", TestPointCreateView.as_view(), name="testpoint_create"),
+    path(
+        "testpoints/<int:pk>/edit/",
+        TestPointUpdateView.as_view(),
+        name="testpoint_update",
+    ),
+    path("samples/", FieldSampleListView.as_view(), name="fieldsample_list"),
+    path("samples/new/", FieldSampleCreateView.as_view(), name="fieldsample_create"),
+    path(
+        "samples/<int:pk>/edit/",
+        FieldSampleUpdateView.as_view(),
+        name="fieldsample_update",
+    ),
+    path("collections/", SampleCollectionListView.as_view(), name="samplecollection_list"),
+    path(
+        "collections/new/",
+        SampleCollectionCreateView.as_view(),
+        name="samplecollection_create",
+    ),
+    path(
+        "collections/<int:pk>/edit/",
+        SampleCollectionUpdateView.as_view(),
+        name="samplecollection_update",
+    ),
+    path("results/", SampleResultListView.as_view(), name="sampleresult_list"),
+    path("results/new/", SampleResultCreateView.as_view(), name="sampleresult_create"),
+    path(
+        "nonconformances/",
+        NonConformanceListView.as_view(),
+        name="nonconformance_list",
+    ),
+    path(
+        "nonconformances/new/",
+        NonConformanceCreateView.as_view(),
+        name="nonconformance_create",
+    ),
+    path("incidents/", IncidentListView.as_view(), name="incident_list"),
+    path("incidents/new/", IncidentCreateView.as_view(), name="incident_create"),
+    path("actions/", CorrectiveActionListView.as_view(), name="correctiveaction_list"),
+    path("actions/new/", CorrectiveActionCreateView.as_view(), name="correctiveaction_create"),
+]
+
+

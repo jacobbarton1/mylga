@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block header_files %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+{% endblock header_files %}
+
+{% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-md-8 col-xs-12 text-center">
+    <h3 id="site-heading">Gauge history</h3>
+    <p>(7 day history)</p>
+    <canvas id="myChart" width="800" height="400"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  async function getData() {
+    try {
+      const response = await fetch('/flood/api/history/?handle={{ handle }}');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return null;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const { DateTime } = luxon;
+    const endOfToday = DateTime.now().plus({ days: 1 }).startOf('day');
+    const labels = Array.from({ length: 7 }, (_, i) =>
+      endOfToday.minus({ days: 6 - i })
+    );
+
+    getData().then(json_data => {
+      if (!json_data) {
+        return;
+      }
+      const data = json_data.history.map(obj => ({
+        x: obj.created_at,
+        y: obj.distance
+      }));
+
+      const config = {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: json_data.site_details.handle,
+            data: data,
+            backgroundColor: 'rgba(75, 192, 192, 1)'
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'day',
+                tooltipFormat: 'yyyy-MM-dd HH:mm'
+              },
+              title: {
+                display: true,
+                text: 'Date'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Height (mm)'
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `Height: ${context.parsed.y} mm`;
+                }
+              }
+            }
+          }
+        }
+      };
+
+      const scatterChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+
+      document.getElementById('site-heading').innerText = json_data.site_details.location;
+    });
+  });
+</script>
+{% endblock scripts %}
+

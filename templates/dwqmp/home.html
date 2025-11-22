@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="p-5 bg-light rounded-3 mb-4">
+  <div class="container-fluid py-3">
+    <h1 class="display-6 fw-bold">Drinking Water Quality Management</h1>
+    <p class="col-md-8 fs-5">
+      Plan, schedule, record, and manage water quality testing across schemes and locations.
+    </p>
+    <a class="btn btn-primary btn-lg" href="{% url 'dwqmp:scheme_list' %}">Get started</a>
+  </div>
+</div>
+{% endblock %}
+

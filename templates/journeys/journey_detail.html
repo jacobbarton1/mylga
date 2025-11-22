@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Journey to {{ journey.destination }}</h2>
+  <a href="{% url 'journeys:checkpoint_create' journey.pk %}" class="btn btn-primary btn-sm">
+    Add checkpoint
+  </a>
+</div>
+
+<p class="text-muted">
+  Driver: {{ journey.driver.get_full_name|default:journey.driver.username }},
+  Buddy: {{ journey.buddy.get_full_name|default:journey.buddy.username }},
+  Vehicle: {{ journey.vehicle|default:"—" }}
+</p>
+<p>
+  {{ journey.origin }} → {{ journey.destination }}<br>
+  Starts: {{ journey.start_time }}<br>
+  Expected finish: {{ journey.expected_end_time }}<br>
+  Mode: {{ journey.get_mode_display }}
+</p>
+
+<h5>Checkpoints</h5>
+{% if checkpoints %}
+<ul class="list-group">
+  {% for c in checkpoints %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+      <strong>#{{ c.sequence }} — {{ c.name }}</strong><br>
+      <span class="small text-muted">
+        Expected: {{ c.expected_time }}{% if c.is_complete %} · Checked in: {{ c.checked_in_at }}{% endif %}
+      </span>
+    </div>
+    <div>
+      {% if not c.is_complete %}
+      <form method="post" action="{% url 'journeys:checkpoint_checkin' c.uuid %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success btn-sm">Check in</button>
+      </form>
+      {% else %}
+      <span class="badge bg-success">Complete</span>
+      {% endif %}
+    </div>
+  </li>
+  {% endfor %}
+  </ul>
+{% else %}
+<p class="text-muted">No checkpoints defined yet.</p>
+{% endif %}
+{% endblock %}
+

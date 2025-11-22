@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>My journeys</h2>
+  <a href="{% url 'journeys:journey_create' %}" class="btn btn-primary btn-sm">New journey</a>
+</div>
+
+{% if journeys %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Driver</th>
+        <th>Buddy</th>
+        <th>Vehicle</th>
+        <th>Origin → Destination</th>
+        <th>Start</th>
+        <th>Expected end</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for j in journeys %}
+      <tr>
+        <td>{{ j.driver.get_full_name|default:j.driver.username }}</td>
+        <td>{{ j.buddy.get_full_name|default:j.buddy.username }}</td>
+        <td>{{ j.vehicle }}</td>
+        <td>{{ j.origin }} → {{ j.destination }}</td>
+        <td>{{ j.start_time }}</td>
+        <td>{{ j.expected_end_time }}</td>
+        <td>{{ j.get_status_display }}</td>
+        <td class="text-end">
+          <a class="btn btn-outline-secondary btn-sm" href="{% url 'journeys:journey_detail' j.pk %}">
+            View
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">You don’t have any journeys yet.</p>
+{% endif %}
+{% endblock %}
+
