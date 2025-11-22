@@ -81,3 +81,13 @@ def verify_login_token(token: str) -> str:
     return email
 
 
+def get_lga_domain() -> str:
+    domain = getattr(settings, "LGA_DOMAIN", "murweh.qld.gov.au")
+    return domain.lstrip("@").lower()
+
+
+def is_allowed_email(email: str) -> bool:
+    domain = get_lga_domain()
+    return email.lower().endswith("@" + domain)
+
+

@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from .forms import EmailLoginForm, ProfileForm
 from .models import UserProfile
-from .utils import InvalidToken, generate_login_token, verify_login_token
+from .utils import InvalidToken, generate_login_token, is_allowed_email, verify_login_token
 
 
 User = get_user_model()
@@ -28,6 +28,22 @@ def request_link(request: HttpRequest) -> HttpResponse:
             if created:
                 UserProfile.objects.create(user=user)
 
+            # Development bypass: log in immediately instead of sending email.
+            if settings.DEBUG and getattr(settings, "BYPASS_LOGIN", False):
+                login(request, user)
+                profile, _ = UserProfile.objects.get_or_create(user=user)
+                if profile.require_profile_update or not (
+                    user.first_name and user.last_name
+                ):
+                    return redirect("accounts:profile")
+
+                messages.info(
+                    request,
+                    "Logged in automatically (BYPASS_LOGIN is enabled).",
+                )
+                return redirect(settings.LOGIN_REDIRECT_URL)
+
+            # Normal behaviour: send magic-link email.
             token = generate_login_token(email)
             url = request.build_absolute_uri(
                 reverse("accounts:magic_login", args=[token])
@@ -65,7 +81,7 @@ def magic_login(request: HttpRequest, token: str) -> HttpResponse:
     except InvalidToken:
         return HttpResponseBadRequest("Invalid or expired login link.")
 
-    if not email.endswith("@murweh.qld.gov.au"):
+    if not is_allowed_email(email):
         return HttpResponseBadRequest("Invalid email domain.")
 
     user = (
@@ -97,5 +113,4 @@ def profile(request: HttpRequest) -> HttpResponse:
         form = ProfileForm(instance=profile, user=request.user)
 
     return render(request, "accounts/profile.html", {"form": form})
-
 

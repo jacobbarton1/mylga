@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from .models import UserProfile
+from .utils import is_allowed_email
 
 
 User = get_user_model()
@@ -12,10 +13,8 @@ class EmailLoginForm(forms.Form):
 
     def clean_email(self) -> str:
         email = self.cleaned_data["email"].strip().lower()
-        if not email.endswith("@murweh.qld.gov.au"):
-            raise forms.ValidationError(
-                "Only @murweh.qld.gov.au email addresses are allowed."
-            )
+        if not is_allowed_email(email):
+            raise forms.ValidationError("Please use your council email address.")
         return email
 
 
@@ -43,5 +42,4 @@ class ProfileForm(forms.ModelForm):
             profile.require_profile_update = False
             profile.save()
         return profile
-
 

@@ -3,12 +3,31 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from a local .env file, if present.
+# This avoids adding extra dependencies while still supporting
+# simple configuration for development and deployment.
+env_path = BASE_DIR / ".env"
+if env_path.exists():
+    with env_path.open() as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            os.environ.setdefault(key, value)
+
 # Quick-start development settings - unsuitable for production
 
-SECRET_KEY = '1234567890'
-DEBUG = True
+SECRET_KEY = os.getenv("SECRET_KEY", "1234567890")
+DEBUG = os.getenv("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
 ALLOWED_HOSTS = []
+
+# Local government domain configuration
+LGA_DOMAIN = os.getenv("LGA_DOMAIN", "murweh.qld.gov.au").lstrip("@")
+BYPASS_LOGIN = os.getenv("BYPASS_LOGIN", "False").lower() in {"1", "true", "yes", "on"}
 
 # Application definition
 
@@ -128,7 +147,7 @@ EMAIL_BACKEND = os.getenv(
 )
 DEFAULT_FROM_EMAIL = os.getenv(
     'DJANGO_DEFAULT_FROM_EMAIL',
-    'no-reply@murweh.qld.gov.au',
+    f'no-reply@{LGA_DOMAIN}',
 )
 
 
