@@ -26,6 +26,24 @@ def defect_list(request):
 
 
 @login_required
+@fleet_admin_required
+def defect_all_list(request):
+    defects = (
+        DefectReport.objects.select_related("vehicle", "reported_by")
+        .prefetch_related("maintenance_records")
+        .order_by("-reported_at")
+    )
+    paginator = Paginator(defects, 50)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        "fleet/defect_all_list.html",
+        {"page_obj": page_obj, "defects": page_obj.object_list},
+    )
+
+
+@login_required
 def vehicle_list(request):
     vehicles = Vehicle.objects.all()
     can_manage = user_is_fleet_admin(request.user)
@@ -33,6 +51,24 @@ def vehicle_list(request):
         request,
         "fleet/vehicle_list.html",
         {"vehicles": vehicles, "can_manage_fleet": can_manage},
+    )
+
+
+@login_required
+@fleet_admin_required
+def maintenance_list(request):
+    records = (
+        MaintenanceRecord.objects.select_related("vehicle", "submitted_by", "defect_report")
+        .prefetch_related("evidence_documents")
+        .order_by("-date", "-pk")
+    )
+    paginator = Paginator(records, 50)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        "fleet/maintenance_list.html",
+        {"page_obj": page_obj, "records": page_obj.object_list},
     )
 
 

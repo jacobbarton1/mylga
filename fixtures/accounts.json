@@ -11,10 +11,10 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-      "password": "1234",
+      "password": "pbkdf2_sha256$390000$codexsalt$BxpCR18hA692fMnBlJzg4Gb0IfyhJXZCW+XgIlKdf/4=",
       "last_login": null,
       "is_superuser": true,
-      "username": "admin",
+      "username": "jacob_barton",
       "first_name": "Jacob",
       "last_name": "Barton",
       "email": "jacob_barton@murweh.qld.gov.au",
@@ -30,10 +30,11 @@
     "pk": 1,
     "fields": {
       "user": 1,
-      "job_title": "Director of Engineernig Services",
+      "job_title": "Director of Engineering Services",
       "department": "Engineering",
       "phone_number": "0418987267",
-      "location": "Charleville"
+      "location": "Charleville Regional Office",
+      "require_profile_update": false
     }
   },
   {
@@ -43,15 +44,27 @@
       "password": "pbkdf2_sha256$390000$codexsalt$BxpCR18hA692fMnBlJzg4Gb0IfyhJXZCW+XgIlKdf/4=",
       "last_login": null,
       "is_superuser": false,
-      "username": "driver",
-      "first_name": "Drew",
-      "last_name": "Driver",
-      "email": "drew.driver@murweh.qld.gov.au",
-      "is_staff": false,
+      "username": "ryan_carr",
+      "first_name": "Ryan",
+      "last_name": "Carr",
+      "email": "ryan_carr@murweh.qld.gov.au",
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2024-01-02T01:30:00Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.userprofile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "job_title": "Fleet Manager",
+      "department": "Workshop",
+      "phone_number": "0418123456",
+      "location": "Charleville Depot",
+      "require_profile_update": false
     }
   },
   {
@@ -73,6 +86,18 @@
     }
   },
   {
+    "model": "accounts.userprofile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "job_title": "Buddy Officer",
+      "department": "Community Safety",
+      "phone_number": "07 4656 0002",
+      "location": "Town Hall",
+      "require_profile_update": false
+    }
+  },
+  {
     "model": "auth.user",
     "pk": 4,
     "fields": {
@@ -88,42 +113,6 @@
       "date_joined": "2024-01-03T01:00:00Z",
       "groups": [],
       "user_permissions": []
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 1,
-    "fields": {
-      "user": 1,
-      "job_title": "Digital Lead",
-      "department": "Corporate",
-      "phone_number": "07 4656 0000",
-      "location": "Charleville Civic Centre",
-      "require_profile_update": false
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 2,
-    "fields": {
-      "user": 2,
-      "job_title": "Fleet Driver",
-      "department": "Works",
-      "phone_number": "07 4656 0001",
-      "location": "Depot",
-      "require_profile_update": false
-    }
-  },
-  {
-    "model": "accounts.userprofile",
-    "pk": 3,
-    "fields": {
-      "user": 3,
-      "job_title": "Buddy Officer",
-      "department": "Community Safety",
-      "phone_number": "07 4656 0002",
-      "location": "Town Hall",
-      "require_profile_update": false
     }
   },
   {

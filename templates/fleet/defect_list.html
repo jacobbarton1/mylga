@@ -6,7 +6,15 @@
     <h2 class="mb-0">Outstanding fleet defects</h2>
     <p class="text-muted mb-0">Showing open and in-progress reports.</p>
   </div>
-  <a href="{% url 'fleet:defect_create' %}" class="btn btn-warning">Report a new defect</a>
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'fleet:defect_create' %}" class="btn btn-warning">Report a new defect</a>
+    {% if can_manage_fleet %}
+    <a href="{% url 'fleet:vehicle_list' %}" class="btn btn-outline-primary">Manage vehicles</a>
+    <a href="{% url 'fleet:maintenance_create' %}" class="btn btn-outline-success">Add maintenance</a>
+    <a href="{% url 'fleet:maintenance_list' %}" class="btn btn-outline-secondary">View maintenance records</a>
+    <a href="{% url 'fleet:defect_all_list' %}" class="btn btn-outline-dark">View all defects</a>
+    {% endif %}
+  </div>
 </div>
 
 {% if defects %}
