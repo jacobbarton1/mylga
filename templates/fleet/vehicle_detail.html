@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h2>Unit {{ vehicle.unit_number|floatformat:"0" }} — {{ vehicle.registration }}</h2>
-  <div>
-    <a href="{% url 'fleet:defect_create_for_vehicle' vehicle.pk %}" class="btn btn-warning btn-sm me-2">
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+  <h2 class="mb-0">Unit {{ vehicle.unit_number|floatformat:"0" }} — {{ vehicle.registration }}</h2>
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'fleet:defect_create_for_vehicle' vehicle.pk %}" class="btn btn-warning btn-sm">
       Report defect
     </a>
+    {% if can_manage_fleet %}
     <a href="{% url 'fleet:maintenance_create_for_vehicle' vehicle.pk %}" class="btn btn-success btn-sm">
       Add maintenance
     </a>
+    <a href="{% url 'fleet:vehicle_update' vehicle.pk %}" class="btn btn-outline-primary btn-sm">
+      Edit vehicle
+    </a>
+    <a href="{% url 'fleet:vehicle_delete' vehicle.pk %}" class="btn btn-outline-danger btn-sm">
+      Delete vehicle
+    </a>
+    {% endif %}
   </div>
 </div>
 

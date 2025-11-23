@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mb-3">Add vehicle</h2>
+<h2 class="mb-3">{{ form_title|default:"Add vehicle" }}</h2>
 <form method="post" class="card card-body">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Save</button>
+  <button type="submit" class="btn btn-primary">
+    {{ submit_label|default:"Save vehicle" }}
+  </button>
 </form>
 {% endblock %}
-

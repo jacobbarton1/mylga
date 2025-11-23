@@ -73,6 +73,13 @@ The fixtures include:
 - `fixtures/dwqmp.json` – a drinking-water scheme, sampling point, field
   samples, results, and follow-up actions for water-quality workflows.
 
+### Fleet admin permissions
+
+Only members of the `FleetAdmin` group (or superusers) can add/edit/delete
+vehicles, update defect reports, or submit maintenance records. Use the Django
+admin to add staff to this group for elevated access. The sample admin account
+(`jacob_barton@murweh.qld.gov.au`) already belongs to `FleetAdmin`.
+
 The main apps are available at:
 
 - `/` – Home dashboard

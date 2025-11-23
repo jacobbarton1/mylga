@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-3">Delete vehicle</h2>
+<div class="alert alert-danger">
+  This will remove Unit {{ vehicle.unit_number|floatformat:"0" }} — {{ vehicle.registration|default:"unregistered" }}.
+  All related defects and maintenance records will also be deleted. This action cannot be undone.
+</div>
+<form method="post">
+  {% csrf_token %}
+  <a href="{% url 'fleet:vehicle_detail' vehicle.pk %}" class="btn btn-outline-secondary me-2">Cancel</a>
+  <button type="submit" class="btn btn-danger">Delete vehicle</button>
+</form>
+{% endblock %}

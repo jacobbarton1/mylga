@@ -3,7 +3,9 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Fleet vehicles</h2>
+  {% if can_manage_fleet %}
   <a href="{% url 'fleet:vehicle_create' %}" class="btn btn-primary btn-sm">Add vehicle</a>
+  {% endif %}
 </div>
 
 {% if vehicles %}
@@ -28,9 +30,17 @@
         <td>{{ v.make }} {{ v.model }}</td>
         <td>{{ v.department }}</td>
         <td class="text-end">
-          <a class="btn btn-outline-secondary btn-sm" href="{% url 'fleet:vehicle_detail' v.pk %}">
+          <a class="btn btn-outline-secondary btn-sm me-1" href="{% url 'fleet:vehicle_detail' v.pk %}">
             View
           </a>
+          {% if can_manage_fleet %}
+          <a class="btn btn-outline-primary btn-sm me-1" href="{% url 'fleet:vehicle_update' v.pk %}">
+            Edit
+          </a>
+          <a class="btn btn-outline-danger btn-sm" href="{% url 'fleet:vehicle_delete' v.pk %}">
+            Delete
+          </a>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
@@ -41,4 +51,3 @@
 <p class="text-muted">No vehicles have been added yet.</p>
 {% endif %}
 {% endblock %}
-

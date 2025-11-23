@@ -1,5 +1,13 @@
 [
   {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "FleetAdmin",
+      "permissions": []
+    }
+  },
+  {
     "model": "auth.user",
     "pk": 1,
     "fields": {
@@ -13,8 +21,19 @@
       "is_staff": true,
       "is_active": true,
       "date_joined": "2024-01-01T09:00:00Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.userprofile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "job_title": "Director of Engineernig Services",
+      "department": "Engineering",
+      "phone_number": "0418987267",
+      "location": "Charleville"
     }
   },
   {
