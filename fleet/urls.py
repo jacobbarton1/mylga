@@ -33,4 +33,5 @@ urlpatterns = [
         views.maintenance_update,
         name="maintenance_update",
     ),
+    path("reports/", views.fleet_report, name="report"),
 ]

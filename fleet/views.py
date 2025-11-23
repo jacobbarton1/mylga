@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import DefectReportForm, MaintenanceRecordForm, VehicleForm
+from .forms import FleetReportForm, DefectReportForm, MaintenanceRecordForm, VehicleForm
 from .models import DefectReport, MaintenanceEvidence, MaintenanceRecord, Vehicle
 from .permissions import fleet_admin_required, user_is_fleet_admin
 
@@ -287,3 +287,38 @@ def _save_record_evidence(record, files, user):
             file=upload,
             uploaded_by=user if user.is_authenticated else None,
         )
+
+
+@login_required
+@fleet_admin_required
+def fleet_report(request):
+    form = FleetReportForm(request.GET or None)
+    results = None
+    if form.is_valid():
+        start = form.cleaned_data["start_date"]
+        end = form.cleaned_data["end_date"]
+        new_defects = (
+            DefectReport.objects.filter(reported_at__date__gte=start, reported_at__date__lte=end)
+            .select_related("vehicle", "reported_by")
+            .order_by("-reported_at")
+        )
+        closed_defects = (
+            DefectReport.objects.filter(
+                status__in=["resolved", "closed"], resolved_at__date__gte=start, resolved_at__date__lte=end
+            )
+            .select_related("vehicle", "reported_by")
+            .order_by("-resolved_at")
+        )
+        maintenance = (
+            MaintenanceRecord.objects.filter(date__gte=start, date__lte=end)
+            .select_related("vehicle", "submitted_by", "defect_report")
+            .order_by("-date")
+        )
+        results = {
+            "start": start,
+            "end": end,
+            "new_defects": new_defects,
+            "closed_defects": closed_defects,
+            "maintenance_records": maintenance,
+        }
+    return render(request, "fleet/report.html", {"form": form, "results": results})

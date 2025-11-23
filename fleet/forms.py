@@ -75,3 +75,16 @@ class MaintenanceRecordForm(forms.ModelForm):
                 "Selected defect report does not belong to the chosen vehicle."
             )
         return cleaned_data
+
+
+class FleetReportForm(forms.Form):
+    start_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+    end_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get("start_date")
+        end = cleaned_data.get("end_date")
+        if start and end and start > end:
+            raise forms.ValidationError("Start date must be before end date.")
+        return cleaned_data

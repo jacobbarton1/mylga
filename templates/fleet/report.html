@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4">
+  <h2>Fleet activity report</h2>
+  <p class="text-muted mb-0">Select a date range to summarise defects and maintenance.</p>
+</div>
+
+<form method="get" class="card card-body mb-4">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label class="form-label" for="id_start_date">Start date</label>
+      {{ form.start_date }}
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="id_end_date">End date</label>
+      {{ form.end_date }}
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Generate report</button>
+    </div>
+  </div>
+  {% if form.errors %}
+  <div class="alert alert-danger mt-3">
+    {{ form.errors }}
+  </div>
+  {% endif %}
+</form>
+
+{% if results %}
+<div class="mb-4">
+  <h5 class="mb-1">Summary for {{ results.start }} to {{ results.end }}</h5>
+  <p class="text-muted mb-0">
+    {{ results.new_defects|length }} new defects ·
+    {{ results.closed_defects|length }} closed defects ·
+    {{ results.maintenance_records|length }} maintenance records
+  </p>
+</div>
+
+<div class="mb-4">
+  <h4>New defect reports</h4>
+  {% if results.new_defects %}
+  <div class="list-group">
+    {% for defect in results.new_defects %}
+    <a href="{% url 'fleet:defect_detail' defect.pk %}" class="list-group-item list-group-item-action">
+      <div class="d-flex justify-content-between">
+        <strong>{{ defect.vehicle }}</strong>
+        <span class="text-muted">{{ defect.reported_at|date:"Y-m-d H:i" }}</span>
+      </div>
+      <div>{{ defect.description }}</div>
+      <div class="small text-muted">
+        Severity: {{ defect.get_severity_display }} · Status: {{ defect.get_status_display }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No new defects during this period.</p>
+  {% endif %}
+</div>
+
+<div class="mb-4">
+  <h4>Closed defect reports</h4>
+  {% if results.closed_defects %}
+  <div class="list-group">
+    {% for defect in results.closed_defects %}
+    <a href="{% url 'fleet:defect_detail' defect.pk %}" class="list-group-item list-group-item-action">
+      <div class="d-flex justify-content-between">
+        <strong>{{ defect.vehicle }}</strong>
+        <span class="text-muted">{{ defect.resolved_at|date:"Y-m-d H:i"|default:"—" }}</span>
+      </div>
+      <div>{{ defect.description }}</div>
+      <div class="small text-muted">
+        Status: {{ defect.get_status_display }} ({{ defect.severity }})
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No defects were closed during this period.</p>
+  {% endif %}
+</div>
+
+<div class="mb-4">
+  <h4>Maintenance records</h4>
+  {% if results.maintenance_records %}
+  <div class="list-group">
+    {% for record in results.maintenance_records %}
+    <a href="{% url 'fleet:maintenance_detail' record.pk %}" class="list-group-item list-group-item-action">
+      <div class="d-flex justify-content-between">
+        <strong>{{ record.vehicle }} — {{ record.date|date:"Y-m-d" }}</strong>
+        {% if record.cost %}
+        <span class="text-muted">Cost: ${{ record.cost }}</span>
+        {% endif %}
+      </div>
+      <div>{{ record.description }}</div>
+      <div class="small text-muted">
+        Submitted by {{ record.submitted_by.get_full_name|default:record.submitted_by|default:"System" }}
+        {% if record.defect_report %} · Linked defect: {{ record.defect_report.get_status_display }}{% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No maintenance records for this period.</p>
+  {% endif %}
+</div>
+{% elif form.is_bound %}
+<p>Enter a valid date range to see report results.</p>
+{% endif %}
+{% endblock %}
