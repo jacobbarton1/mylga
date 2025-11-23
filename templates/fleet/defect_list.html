@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+  <div>
+    <h2 class="mb-0">Outstanding fleet defects</h2>
+    <p class="text-muted mb-0">Showing open and in-progress reports.</p>
+  </div>
+  <a href="{% url 'fleet:defect_create' %}" class="btn btn-warning">Report a new defect</a>
+</div>
+
+{% if defects %}
+<div class="list-group">
+  {% for defect in defects %}
+  <a href="{% url 'fleet:defect_detail' defect.pk %}" class="list-group-item list-group-item-action py-3">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ defect.vehicle }} — {{ defect.get_severity_display }}</h5>
+      <small class="text-muted">{{ defect.reported_at|date:"Y-m-d H:i" }}</small>
+    </div>
+    <p class="mb-1">{{ defect.description }}</p>
+    <div class="small text-muted">
+      Status: {{ defect.get_status_display }} · Reported by {{ defect.reported_by.get_full_name|default:defect.reported_by|default:"Unknown" }}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+<nav class="mt-4" aria-label="Defect pagination">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <span class="page-link">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% else %}
+<div class="alert alert-success">
+  No outstanding defects! Use the button above to raise a new report when needed.
+</div>
+{% endif %}
+{% endblock %}

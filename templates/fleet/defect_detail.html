@@ -3,8 +3,14 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Defect for Unit {{ defect.vehicle.unit_number|floatformat:"0" }}</h2>
-  <div class="d-flex gap-2">
+  <div class="d-flex gap-2 flex-wrap">
+    <a href="{% url 'fleet:defect_create_for_vehicle' defect.vehicle.pk %}" class="btn btn-outline-warning btn-sm">
+      Report another defect
+    </a>
     {% if can_manage_fleet %}
+    <a href="{% url 'fleet:maintenance_create_for_vehicle' defect.vehicle.pk %}?defect={{ defect.pk }}" class="btn btn-success btn-sm">
+      Add maintenance
+    </a>
     <a href="{% url 'fleet:defect_update' defect.pk %}" class="btn btn-warning btn-sm">Edit defect</a>
     {% endif %}
     <a href="{% url 'fleet:vehicle_detail' defect.vehicle.pk %}" class="btn btn-outline-secondary btn-sm">Back to vehicle</a>

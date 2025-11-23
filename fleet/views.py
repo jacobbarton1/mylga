@@ -1,9 +1,28 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import DefectReportForm, MaintenanceRecordForm, VehicleForm
 from .models import DefectReport, MaintenanceEvidence, MaintenanceRecord, Vehicle
 from .permissions import fleet_admin_required, user_is_fleet_admin
+
+
+@login_required
+def defect_list(request):
+    can_manage = user_is_fleet_admin(request.user)
+    defects_qs = (
+        DefectReport.objects.filter(status__in=["open", "in_progress"])
+        .select_related("vehicle", "reported_by")
+        .order_by("-reported_at")
+    )
+    paginator = Paginator(defects_qs, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(
+        request,
+        "fleet/defect_list.html",
+        {"page_obj": page_obj, "defects": page_obj.object_list, "can_manage_fleet": can_manage},
+    )
 
 
 @login_required
@@ -148,7 +167,17 @@ def maintenance_create(request, vehicle_pk=None):
     vehicle = None
     if vehicle_pk is not None:
         vehicle = get_object_or_404(Vehicle, pk=vehicle_pk)
-    initial = {"vehicle": vehicle} if vehicle else {}
+    defect = None
+    defect_pk = request.GET.get("defect")
+    if defect_pk:
+        defect = get_object_or_404(DefectReport, pk=defect_pk)
+        if vehicle is None:
+            vehicle = defect.vehicle
+    initial = {}
+    if vehicle:
+        initial["vehicle"] = vehicle
+    if defect:
+        initial["defect_report"] = defect
 
     if request.method == "POST":
         form = MaintenanceRecordForm(
