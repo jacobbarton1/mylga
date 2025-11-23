@@ -106,3 +106,26 @@ fields, or UI flows. For example, you can add sections like “Proposed changes�
 or inline comments describing new models (e.g. scheduled sampling plans, lab
 chain-of-custody records). Once updated, I can follow the instructions to
 implement the refactor.
+
+## Feedback prompts by URL
+
+- `/water/` – Does the dashboard surface the right shortcuts? Would a live feed
+  of upcoming sampling tasks help?
+- `/water/providers/` – Is there additional contact info you’d capture per
+  provider? Any bulk actions required?
+- `/water/schemes/` – Should the list include sampling compliance summaries or
+  links to maps?
+- `/water/schemes/<id>/` – Would it be useful to show a map with sampling points
+  and metadata (e.g. “it would be nice if the view for `/water/schemes/<int>/`
+  showed a Google map with labels for all sampling points”)?
+- `/water/testpoints/` – Do you need filtering/grouping to spot overdue points?
+- `/water/samples/` – Is the sampling log missing context (e.g. weather,
+  operator notes) that would improve decision making?
+- `/water/collections/` – Would barcodes or courier tracking integrations help?
+- `/water/results/` – Should limits/highlights be shown inline to spot
+  exceedances faster?
+- `/water/nonconformances/` – Are there other statuses or notifications you want
+  to track?
+- `/water/incidents/` – Do you need a timeline or attachments summary here?
+- `/water/actions/` – Would a Gantt-style view or progress tracking help?
+- `/water/reports/` – Are there additional export formats or metrics you need?
