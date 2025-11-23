@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Maintenance on {{ record.date|date:"Y-m-d" }}</h2>
+  <div>
+    <a href="{% url 'fleet:maintenance_update' record.pk %}" class="btn btn-success btn-sm me-2">Edit record</a>
+    <a href="{% url 'fleet:vehicle_detail' record.vehicle.pk %}" class="btn btn-outline-secondary btn-sm">Back to vehicle</a>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Vehicle</dt>
+      <dd class="col-sm-9">Unit {{ record.vehicle.unit_number|floatformat:"0" }} — {{ record.vehicle.registration }}</dd>
+      <dt class="col-sm-3">Description</dt>
+      <dd class="col-sm-9">{{ record.description }}</dd>
+      <dt class="col-sm-3">Linked defect</dt>
+      <dd class="col-sm-9">
+        {% if record.defect_report %}
+          <a href="{% url 'fleet:defect_detail' record.defect_report.pk %}">{{ record.defect_report.get_status_display }} defect</a>
+        {% else %}
+          <span class="text-muted">None</span>
+        {% endif %}
+      </dd>
+      <dt class="col-sm-3">Submitted by</dt>
+      <dd class="col-sm-9">{{ record.submitted_by.get_full_name|default:record.submitted_by|default:"System" }}</dd>
+      <dt class="col-sm-3">Odometer</dt>
+      <dd class="col-sm-9">{{ record.odometer_km|default:"—" }}</dd>
+      <dt class="col-sm-3">Cost</dt>
+      <dd class="col-sm-9">
+        {% if record.cost %}
+          ${{ record.cost }}
+        {% else %}
+          —
+        {% endif %}
+      </dd>
+      <dt class="col-sm-3">Next due</dt>
+      <dd class="col-sm-9">{{ record.next_due_date|date:"Y-m-d"|default:"—" }}</dd>
+    </dl>
+  </div>
+</div>
+
+<h5>Supporting documents</h5>
+{% with evidence=record.evidence_documents.all %}
+  {% if evidence %}
+  <ul class="list-group mb-4">
+    {% for doc in evidence %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <div class="fw-bold">{{ doc.file.name }}</div>
+        <div class="small text-muted">Uploaded {{ doc.uploaded_at|date:"Y-m-d H:i" }} by {{ doc.uploaded_by.get_full_name|default:doc.uploaded_by|default:"System" }}</div>
+      </div>
+      <a class="btn btn-outline-primary btn-sm" href="{{ doc.file.url }}" target="_blank">Download</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No supporting documents uploaded yet.</p>
+  {% endif %}
+{% endwith %}
+{% endblock %}

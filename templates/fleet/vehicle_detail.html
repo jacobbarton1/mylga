@@ -36,10 +36,11 @@
     {% if defects %}
     <ul class="list-group">
       {% for d in defects %}
-      <li class="list-group-item">
+      <li class="list-group-item position-relative">
         <div class="fw-bold">{{ d.get_severity_display }} — {{ d.reported_at|date:"Y-m-d H:i" }}</div>
         <div>{{ d.description }}</div>
         <div class="small text-muted">Status: {{ d.get_status_display }}</div>
+        <a href="{% url 'fleet:defect_detail' d.pk %}" class="stretched-link"></a>
       </li>
       {% endfor %}
     </ul>
@@ -53,7 +54,7 @@
     {% if maintenance_records %}
     <ul class="list-group">
       {% for m in maintenance_records %}
-      <li class="list-group-item">
+      <li class="list-group-item position-relative">
         <div class="fw-bold">{{ m.date|date:"Y-m-d" }} — {{ m.description }}</div>
         {% if m.odometer_km %}
         <div class="small text-muted">Odometer: {{ m.odometer_km }} km</div>
@@ -61,6 +62,18 @@
         {% if m.cost %}
         <div class="small text-muted">Cost: ${{ m.cost }}</div>
         {% endif %}
+        <div class="small text-muted">
+          Submitted by: {{ m.submitted_by.get_full_name|default:m.submitted_by|default:"System" }}
+          {% if m.defect_report %}
+          · Linked defect status: {{ m.defect_report.get_status_display }}
+          {% endif %}
+        </div>
+        {% with evidence_count=m.evidence_documents.count %}
+        {% if evidence_count %}
+        <div class="small text-muted">{{ evidence_count }} supporting document{{ evidence_count|pluralize }}</div>
+        {% endif %}
+        {% endwith %}
+        <a href="{% url 'fleet:maintenance_detail' m.pk %}" class="stretched-link"></a>
       </li>
       {% endfor %}
     </ul>
@@ -70,4 +83,3 @@
   </div>
 </div>
 {% endblock %}
-

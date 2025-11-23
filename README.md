@@ -45,6 +45,34 @@ Then run the development server:
 python manage.py runserver
 ```
 
+### Media uploads
+
+Maintenance evidence documents (multiple per maintenance record) are stored under
+`media/fleet/maintenance/<unit>/<year>/<month>/`.
+Ensure the default `media/` folder exists (create it with `mkdir -p media`) and keep it
+out of version control. Django serves uploaded files automatically in development when
+`DEBUG=True`; configure your production web server to serve `MEDIA_ROOT`.
+
+### Sample data fixtures
+
+To explore implemented functionality without manual data entry, load the bundled
+fixtures (order matters so users exist before related records reference them):
+
+```bash
+python manage.py loaddata fixtures/accounts fixtures/fleet fixtures/journeys fixtures/dwqmp
+```
+
+The fixtures include:
+
+- `fixtures/accounts.json` – four staff accounts plus completed profiles. All
+  sample accounts use the password `testpass123`.
+- `fixtures/fleet.json` – representative vehicles with maintenance history and
+  defect reports assigned to the sample users.
+- `fixtures/journeys.json` – an active manual journey and a completed GPS
+  journey with checkpoints linked to fleet vehicles and staff.
+- `fixtures/dwqmp.json` – a drinking-water scheme, sampling point, field
+  samples, results, and follow-up actions for water-quality workflows.
+
 The main apps are available at:
 
 - `/` – Home dashboard

@@ -14,12 +14,19 @@ urlpatterns = [
         name="defect_create_for_vehicle",
     ),
     path("defects/new/", views.defect_create, name="defect_create"),
+    path("defects/<int:pk>/", views.defect_detail, name="defect_detail"),
+    path("defects/<int:pk>/edit/", views.defect_update, name="defect_update"),
     path(
         "vehicles/<int:vehicle_pk>/maintenance/new/",
         views.maintenance_create,
         name="maintenance_create_for_vehicle",
     ),
     path("maintenance/new/", views.maintenance_create, name="maintenance_create"),
+    path("maintenance/<int:pk>/", views.maintenance_detail, name="maintenance_detail"),
+    path(
+        "maintenance/<int:pk>/edit/",
+        views.maintenance_update,
+        name="maintenance_update",
+    ),
 ]
-
 

@@ -1,0 +1,148 @@
+[
+  {
+    "model": "dwqmp.serviceprovider",
+    "pk": 1,
+    "fields": {
+      "name": "Murweh Water Services",
+      "spid": 4567,
+      "primary_contact": 4
+    }
+  },
+  {
+    "model": "dwqmp.scheme",
+    "pk": 1,
+    "fields": {
+      "service_provider": 1,
+      "type": "DW",
+      "description": "Charleville Drinking Water",
+      "latitude": -26.405100,
+      "longitude": 146.238500,
+      "address": "95 Alfred Street, Charleville QLD"
+    }
+  },
+  {
+    "model": "dwqmp.testtype",
+    "pk": 1,
+    "fields": {
+      "description": "E. coli",
+      "units": "MPN/100mL",
+      "limit": 0.0,
+      "estimated_cost": "45.00",
+      "test_method": "AS/NZS 4276.9"
+    }
+  },
+  {
+    "model": "dwqmp.testtype",
+    "pk": 2,
+    "fields": {
+      "description": "Turbidity",
+      "units": "NTU",
+      "limit": 0.5,
+      "estimated_cost": "25.00",
+      "test_method": "APHA 2130 B"
+    }
+  },
+  {
+    "model": "dwqmp.testpoint",
+    "pk": 1,
+    "fields": {
+      "reference": "CHAR-DW-TP1",
+      "scheme": 1,
+      "test_types": [1, 2],
+      "description": "Charleville WTP outlet sample point",
+      "frequency": 7,
+      "frequency_units": "D"
+    }
+  },
+  {
+    "model": "dwqmp.fieldsample",
+    "pk": 1,
+    "fields": {
+      "test_point": 1,
+      "collected_at": "2024-01-11T23:15:00Z",
+      "collected_by": 4
+    }
+  },
+  {
+    "model": "dwqmp.laboratory",
+    "pk": 1,
+    "fields": {
+      "name": "South West Water Labs",
+      "address": "42 Research Way, Toowoomba QLD",
+      "email": "samples@swwlabs.com",
+      "phone": "07 4632 0000"
+    }
+  },
+  {
+    "model": "dwqmp.samplecollection",
+    "pk": 1,
+    "fields": {
+      "field_samples": [1],
+      "sent_at": "2024-01-12T00:30:00Z",
+      "received_at": "2024-01-12T05:00:00Z",
+      "attachments": null
+    }
+  },
+  {
+    "model": "dwqmp.sampleresult",
+    "pk": 1,
+    "fields": {
+      "field_sample": 1,
+      "test_type": 1,
+      "value": 4.0,
+      "comments": "Positive detection recorded"
+    }
+  },
+  {
+    "model": "dwqmp.sampleresult",
+    "pk": 2,
+    "fields": {
+      "field_sample": 1,
+      "test_type": 2,
+      "value": 0.72,
+      "comments": "Slightly above target due to recent rain"
+    }
+  },
+  {
+    "model": "dwqmp.nonconformance",
+    "pk": 1,
+    "fields": {
+      "sample_result": 1,
+      "date_created": "2024-01-12T06:00:00Z",
+      "status": "AW"
+    }
+  },
+  {
+    "model": "dwqmp.incident",
+    "pk": 1,
+    "fields": {
+      "non_conformance": 1,
+      "incident_id": "NC-2024-001",
+      "occurred_at": "2024-01-12T06:15:00Z",
+      "status": "A"
+    }
+  },
+  {
+    "model": "dwqmp.incidentcorrespondence",
+    "pk": 1,
+    "fields": {
+      "incident": 1,
+      "attachments": null,
+      "date_time": "2024-01-12T08:00:00Z",
+      "comments": "Regulator notified via email"
+    }
+  },
+  {
+    "model": "dwqmp.correctiveaction",
+    "pk": 1,
+    "fields": {
+      "incident": 1,
+      "short_description": "Flush reticulation zone",
+      "long_description": "Undertake flushing of town reticulation and resample after 24 hours.",
+      "status": "PL",
+      "estimated_delivery_date": "2024-01-14",
+      "actual_delivery_date": null,
+      "estimated_cost": "1200.00"
+    }
+  }
+]

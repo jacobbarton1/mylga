@@ -1,0 +1,106 @@
+[
+  {
+    "model": "fleet.vehicle",
+    "pk": 1,
+    "fields": {
+      "unit_number": 1001,
+      "registration": "MRW001",
+      "category": "light",
+      "make": "Toyota",
+      "model": "Hilux",
+      "year": 2022,
+      "department": "Works",
+      "notes": "Fitted with GPS tracker"
+    }
+  },
+  {
+    "model": "fleet.vehicle",
+    "pk": 2,
+    "fields": {
+      "unit_number": 2002,
+      "registration": "MRW045",
+      "category": "heavy",
+      "make": "Isuzu",
+      "model": "FVZ 240-300",
+      "year": 2020,
+      "department": "Water Services",
+      "notes": "Used for heavy haulage"
+    }
+  },
+  {
+    "model": "fleet.defectreport",
+    "pk": 1,
+    "fields": {
+      "vehicle": 1,
+      "reported_by": 2,
+      "reported_at": "2024-01-05T22:15:00Z",
+      "description": "Warning light showing low tyre pressure.",
+      "severity": "low",
+      "status": "in_progress",
+      "workshop_notes": "Tyres checked, replacement booked.",
+      "resolved_at": null
+    }
+  },
+  {
+    "model": "fleet.defectreport",
+    "pk": 2,
+    "fields": {
+      "vehicle": 2,
+      "reported_by": 4,
+      "reported_at": "2023-12-20T06:45:00Z",
+      "description": "Hydraulic leak noticed after shift.",
+      "severity": "high",
+      "status": "resolved",
+      "workshop_notes": "Hydraulic line replaced and pressure tested.",
+      "resolved_at": "2023-12-22T04:30:00Z"
+    }
+  },
+  {
+    "model": "fleet.maintenancerecord",
+    "pk": 1,
+    "fields": {
+      "vehicle": 1,
+      "submitted_by": 1,
+      "defect_report": 1,
+      "date": "2024-01-08",
+      "description": "Scheduled 10,000km service",
+      "odometer_km": 10234,
+      "cost": "450.00",
+      "next_due_date": "2024-04-08"
+    }
+  },
+  {
+    "model": "fleet.maintenancerecord",
+    "pk": 2,
+    "fields": {
+      "vehicle": 2,
+      "submitted_by": 4,
+      "defect_report": null,
+      "date": "2024-02-15",
+      "description": "Brake inspection and pad replacement",
+      "odometer_km": 85760,
+      "cost": "1280.50",
+      "next_due_date": "2024-05-15"
+    }
+  },
+  {
+    "model": "fleet.maintenanceevidence",
+    "pk": 1,
+    "fields": {
+      "maintenance_record": 1,
+      "file": "fleet/maintenance/1001/2024/01/hilux-service-report.pdf",
+      "uploaded_by": 1,
+      "uploaded_at": "2024-01-08T04:00:00Z"
+    }
+  },
+  {
+    "model": "fleet.maintenanceevidence",
+    "pk": 2,
+    "fields": {
+      "maintenance_record": 2,
+      "file": "fleet/maintenance/2002/2024/02/isuzu-brake-inspection.pdf",
+      "uploaded_by": 4,
+      "uploaded_at": "2024-02-15T06:00:00Z"
+    }
+  }
+]
