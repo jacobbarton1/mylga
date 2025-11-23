@@ -12,10 +12,13 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.sample_result }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.sample_result }}
+          <a href="{% url 'dwqmp:nonconformance_update' obj.pk %}" class="stretched-link" aria-label="View non-conformance"></a>
+        </td>
         <td>{{ obj.get_status_display }}</td>
-        <td>{{ obj.date_created }}</td>
+        <td>{{ obj.date_created|date:"Y-m-d H:i" }}</td>
       </tr>
       {% empty %}
       <tr><td colspan="3" class="text-muted">No records yet.</td></tr>
@@ -24,4 +27,3 @@
   </table>
 </div>
 {% endblock %}
-

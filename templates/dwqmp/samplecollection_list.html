@@ -12,9 +12,12 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.sent_at }}</td>
-        <td>{{ obj.received_at|default:"—" }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.sent_at|date:"Y-m-d H:i" }}
+          <a href="{% url 'dwqmp:samplecollection_update' obj.pk %}" class="stretched-link" aria-label="View collection"></a>
+        </td>
+        <td>{{ obj.received_at|date:"Y-m-d H:i"|default:"—" }}</td>
         <td>{{ obj.is_complete|yesno:"Yes,No" }}</td>
       </tr>
       {% empty %}
@@ -24,4 +27,3 @@
   </table>
 </div>
 {% endblock %}
-

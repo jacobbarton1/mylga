@@ -12,9 +12,12 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.test_point }}</td>
-        <td>{{ obj.collected_at }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.test_point }}
+          <a href="{% url 'dwqmp:fieldsample_update' obj.pk %}" class="stretched-link" aria-label="View sample"></a>
+        </td>
+        <td>{{ obj.collected_at|date:"Y-m-d H:i" }}</td>
         <td>{{ obj.collected_by }}</td>
       </tr>
       {% empty %}
@@ -24,4 +27,3 @@
   </table>
 </div>
 {% endblock %}
-

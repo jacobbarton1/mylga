@@ -12,8 +12,11 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.incident.incident_id }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.incident.incident_id }}
+          <a href="{% url 'dwqmp:correctiveaction_update' obj.pk %}" class="stretched-link" aria-label="View corrective action"></a>
+        </td>
         <td>{{ obj.short_description }}</td>
         <td>{{ obj.get_status_display }}</td>
         <td>{{ obj.estimated_delivery_date }}</td>
@@ -25,4 +28,3 @@
   </table>
 </div>
 {% endblock %}
-

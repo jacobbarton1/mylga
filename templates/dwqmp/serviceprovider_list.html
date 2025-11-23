@@ -12,8 +12,11 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.name }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.name }}
+          <a href="{% url 'dwqmp:serviceprovider_update' obj.pk %}" class="stretched-link" aria-label="View provider"></a>
+        </td>
         <td>{{ obj.spid }}</td>
         <td>{{ obj.primary_contact }}</td>
       </tr>
@@ -24,4 +27,3 @@
   </table>
 </div>
 {% endblock %}
-

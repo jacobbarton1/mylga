@@ -12,10 +12,13 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.incident_id }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.incident_id }}
+          <a href="{% url 'dwqmp:incident_update' obj.pk %}" class="stretched-link" aria-label="View incident"></a>
+        </td>
         <td>{{ obj.get_status_display }}</td>
-        <td>{{ obj.occurred_at }}</td>
+        <td>{{ obj.occurred_at|date:"Y-m-d H:i" }}</td>
       </tr>
       {% empty %}
       <tr><td colspan="3" class="text-muted">No records yet.</td></tr>
@@ -24,4 +27,3 @@
   </table>
 </div>
 {% endblock %}
-

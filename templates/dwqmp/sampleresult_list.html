@@ -12,8 +12,11 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.field_sample }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.field_sample }}
+          <a href="{% url 'dwqmp:sampleresult_update' obj.pk %}" class="stretched-link" aria-label="View result"></a>
+        </td>
         <td>{{ obj.test_type }}</td>
         <td>{{ obj.value }}</td>
       </tr>
@@ -24,4 +27,3 @@
   </table>
 </div>
 {% endblock %}
-

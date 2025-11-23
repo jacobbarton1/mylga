@@ -13,9 +13,16 @@
     <tbody>
       {% for obj in object_list %}
       <tr>
-        <td>{{ obj.description }}</td>
+        <td>
+          <strong>{{ obj.description }}</strong>
+          <div class="small text-muted">{{ obj.address }}</div>
+        </td>
         <td>{{ obj.get_type_display }}</td>
         <td>{{ obj.service_provider }}</td>
+        <td class="text-end">
+          <a href="{% url 'dwqmp:scheme_detail' obj.pk %}" class="btn btn-outline-secondary btn-sm">View</a>
+          <a href="{% url 'dwqmp:scheme_update' obj.pk %}" class="btn btn-outline-primary btn-sm">Edit</a>
+        </td>
       </tr>
       {% empty %}
       <tr><td colspan="3" class="text-muted">No records yet.</td></tr>
@@ -24,4 +31,3 @@
   </table>
 </div>
 {% endblock %}
-

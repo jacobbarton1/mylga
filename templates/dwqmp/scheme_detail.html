@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2>{{ object.description }}</h2>
+    <p class="text-muted mb-0">{{ object.get_type_display }} · {{ object.service_provider }}</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'dwqmp:scheme_update' object.pk %}" class="btn btn-outline-primary btn-sm">Edit scheme</a>
+    <a href="{% url 'dwqmp:testpoint_create' %}?scheme={{ object.pk }}" class="btn btn-success btn-sm">Add sampling point</a>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">Address</dt>
+      <dd class="col-sm-9">{{ object.address }}</dd>
+      <dt class="col-sm-3">Coordinates</dt>
+      <dd class="col-sm-9">{{ object.latitude }}, {{ object.longitude }}</dd>
+      <dt class="col-sm-3">Total field samples</dt>
+      <dd class="col-sm-9">{{ field_sample_count }}</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h4 class="mb-0">Sampling points</h4>
+  <a href="{% url 'dwqmp:testpoint_create' %}?scheme={{ object.pk }}" class="btn btn-outline-success btn-sm">
+    Add sampling point
+  </a>
+</div>
+
+{% if test_points %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Description</th>
+        <th>Frequency</th>
+        <th>Tests</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for point in test_points %}
+      <tr>
+        <td>{{ point.reference }}</td>
+        <td>{{ point.description }}</td>
+        <td>{{ point.frequency }} {{ point.get_frequency_units_display }}</td>
+        <td>
+          {% for test in point.test_types.all %}
+            <span class="badge bg-light text-dark">{{ test.description }}</span>
+          {% empty %}
+            <span class="text-muted">None</span>
+          {% endfor %}
+        </td>
+        <td class="text-end">
+          <a href="{% url 'dwqmp:testpoint_update' point.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">No sampling points defined yet. Use the button above to add one.</p>
+{% endif %}
+{% endblock %}

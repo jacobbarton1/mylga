@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4">
+  <h2>Water quality reporting</h2>
+  <p class="text-muted mb-0">Summaries of sampling activity and follow-up actions for a selected period.</p>
+</div>
+
+<form method="get" class="card card-body mb-4">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label class="form-label" for="id_start_date">Start date</label>
+      {{ form.start_date }}
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="id_end_date">End date</label>
+      {{ form.end_date }}
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Generate report</button>
+    </div>
+  </div>
+  {% if form.errors %}
+  <div class="alert alert-danger mt-3">
+    {{ form.errors }}
+  </div>
+  {% endif %}
+</form>
+
+{% if results %}
+<div class="mb-4">
+  <h5 class="mb-1">Summary for {{ results.start }} to {{ results.end }}</h5>
+  <p class="text-muted mb-0">
+    {{ results.new_samples|length }} field samples ·
+    {{ results.sample_collections|length }} sample collections ·
+    {{ results.non_conformances|length }} non-conformances ·
+    {{ results.incidents|length }} incidents
+  </p>
+</div>
+
+<div class="mb-4">
+  <h4>Field samples collected</h4>
+  {% if results.new_samples %}
+  <div class="list-group">
+    {% for sample in results.new_samples %}
+    <a href="{% url 'dwqmp:fieldsample_update' sample.pk %}" class="list-group-item list-group-item-action">
+      <div class="d-flex justify-content-between">
+        <strong>{{ sample.test_point.reference }}</strong>
+        <span class="text-muted">{{ sample.collected_at|date:"Y-m-d H:i" }}</span>
+      </div>
+      <div class="small text-muted">
+        Collected by {{ sample.collected_by.get_full_name|default:sample.collected_by|default:"Unknown" }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No field samples during this period.</p>
+  {% endif %}
+</div>
+
+<div class="mb-4">
+  <h4>Sample collections dispatched</h4>
+  {% if results.sample_collections %}
+  <div class="list-group">
+    {% for collection in results.sample_collections %}
+    <a class="list-group-item list-group-item-action" href="{% url 'dwqmp:samplecollection_update' collection.pk %}">
+      <div class="d-flex justify-content-between">
+        <strong>Sent {{ collection.sent_at|date:"Y-m-d H:i" }}</strong>
+        <span class="text-muted">
+          {{ collection.field_samples.count }} sample{{ collection.field_samples.count|pluralize }}
+        </span>
+      </div>
+      <div class="small text-muted">
+        Received: {{ collection.received_at|date:"Y-m-d H:i"|default:"pending" }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No sample collections during this period.</p>
+  {% endif %}
+</div>
+
+<div class="mb-4">
+  <h4>Non-conformances</h4>
+  {% if results.non_conformances %}
+  <div class="list-group">
+    {% for nc in results.non_conformances %}
+    <a class="list-group-item list-group-item-action" href="{% url 'dwqmp:nonconformance_update' nc.pk %}">
+      <div class="d-flex justify-content-between">
+        <strong>{{ nc.sample_result.test_type.description }}</strong>
+        <span class="text-muted">{{ nc.date_created|date:"Y-m-d H:i" }}</span>
+      </div>
+      <div class="small text-muted">
+        Value: {{ nc.sample_result.value }} · Status: {{ nc.get_status_display }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No non-conformances recorded during this period.</p>
+  {% endif %}
+</div>
+
+<div class="mb-4">
+  <h4>Incidents</h4>
+  {% if results.incidents %}
+  <div class="list-group">
+    {% for incident in results.incidents %}
+    <a class="list-group-item list-group-item-action" href="{% url 'dwqmp:incident_update' incident.pk %}">
+      <div class="d-flex justify-content-between">
+        <strong>{{ incident.incident_id }}</strong>
+        <span class="text-muted">{{ incident.occurred_at|date:"Y-m-d H:i" }}</span>
+      </div>
+      <div class="small text-muted">
+        Status: {{ incident.get_status_display }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No incidents recorded during this period.</p>
+  {% endif %}
+</div>
+
+<div class="mb-4">
+  <h4>Corrective actions</h4>
+  {% if results.actions %}
+  <div class="list-group">
+    {% for action in results.actions %}
+    <a class="list-group-item list-group-item-action" href="{% url 'dwqmp:correctiveaction_update' action.pk %}">
+      <div class="d-flex justify-content-between">
+        <strong>{{ action.short_description }}</strong>
+        <span class="text-muted">Due {{ action.estimated_delivery_date|date:"Y-m-d" }}</span>
+      </div>
+      <div class="small text-muted">
+        Status: {{ action.get_status_display }} · Incident: {{ action.incident.incident_id }}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No corrective actions scheduled in this period.</p>
+  {% endif %}
+</div>
+{% elif form.is_bound %}
+<p>Please choose a valid date range to generate a report.</p>
+{% endif %}
+{% endblock %}

@@ -12,8 +12,11 @@
     </thead>
     <tbody>
       {% for obj in object_list %}
-      <tr>
-        <td>{{ obj.reference }}</td>
+      <tr class="position-relative">
+        <td>
+          {{ obj.reference }}
+          <a href="{% url 'dwqmp:testpoint_update' obj.pk %}" class="stretched-link" aria-label="View test point"></a>
+        </td>
         <td>{{ obj.scheme }}</td>
         <td>{{ obj.description }}</td>
         <td>{{ obj.frequency }} {{ obj.get_frequency_units_display }}</td>
@@ -25,4 +28,3 @@
   </table>
 </div>
 {% endblock %}
-
